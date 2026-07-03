@@ -1,27 +1,81 @@
-.visitButton {
-  border: 0;
-  border-radius: 999px;
-  padding: 10px 14px;
-  font-weight: 950;
+.card {
+  position: relative;
+}
+
+.visitCheckWrap {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
   cursor: pointer;
-  color: white;
-  background: linear-gradient(135deg, #4b2f1c, #394f36);
-  box-shadow: 0 10px 20px rgba(49, 31, 18, 0.16);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.visitButton:hover {
+.visitCheck {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.visitCheckBox {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  border: 2px solid rgba(75, 47, 28, 0.24);
+  background: rgba(255, 250, 240, 0.96);
+  color: transparent;
+  font-weight: 950;
+  font-size: 1.1rem;
+  box-shadow: 0 10px 22px rgba(49, 31, 18, 0.12);
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.visitCheckWrap:hover .visitCheckBox {
   transform: translateY(-1px);
-  box-shadow: 0 14px 26px rgba(49, 31, 18, 0.2);
+  border-color: rgba(57, 79, 54, 0.5);
 }
 
-.visitButton.visited {
-  color: #203018;
-  background: linear-gradient(135deg, #d9f0bf, #fff0c7);
-  border: 1px solid rgba(57, 79, 54, 0.25);
+.visitCheck:focus-visible + .visitCheckBox {
+  outline: 3px solid rgba(216, 152, 53, 0.45);
+  outline-offset: 3px;
+}
+
+.visitCheck:checked + .visitCheckBox {
+  background: linear-gradient(135deg, #394f36, #d89835);
+  border-color: rgba(57, 79, 54, 0.72);
+  color: white;
 }
 
 .card.done .rank::after {
   content: " • visited";
   color: #394f36;
+}
+
+.cardTop {
+  padding-right: 64px;
+}
+
+@media (max-width: 540px) {
+  .visitCheckWrap {
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .visitCheckBox {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+
+  .cardTop {
+    padding-right: 58px;
+  }
 }
