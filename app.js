@@ -96,6 +96,10 @@ function render() {
     const checked = Boolean(state.completed[b.id]);
     return `
       <article class="card ${checked ? "done" : ""}" data-id="${escapeHtml(b.id)}">
+        <label class="visitCheckWrap" title="Mark visited">
+          <input class="visitCheck" type="checkbox" aria-label="Mark ${escapeHtml(b.name)} as visited" ${checked ? "checked" : ""} />
+          <span class="visitCheckBox">✓</span>
+        </label>
         <div class="cardTop">
           <div>
             <div class="titleRow">
@@ -116,7 +120,6 @@ function render() {
           <div class="detailLine"><strong>Ranking note</strong>Static starter ranking. Update scores in app.js any time you want to reflect new review data.</div>
         </div>
         <div class="cardActions">
-          <button class="visitButton ${checked ? "visited" : ""}" type="button">${checked ? "Visited ✓" : "I visited"}</button>
           <button class="toggleDetails" type="button">Details</button>
           <a class="linkBtn" href="${mapUrl(b.name + " " + b.address)}" target="_blank" rel="noopener">Apple Maps</a>
           <a class="linkBtn" href="${escapeHtml(b.website)}" target="_blank" rel="noopener">Website</a>
@@ -129,12 +132,12 @@ function render() {
 function bindCardEvents() {
   document.querySelectorAll(".card").forEach(card => {
     const id = card.dataset.id;
-    const visitButton = card.querySelector(".visitButton");
+    const visitCheck = card.querySelector(".visitCheck");
     const detailButton = card.querySelector(".toggleDetails");
 
-    visitButton.addEventListener("click", () => {
-      if (state.completed[id]) delete state.completed[id];
-      else state.completed[id] = true;
+    visitCheck.addEventListener("change", () => {
+      if (visitCheck.checked) state.completed[id] = true;
+      else delete state.completed[id];
       saveCompleted();
       render();
     });
