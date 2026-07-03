@@ -63,6 +63,8 @@ input:focus, select:focus { border-color: var(--amber); box-shadow: 0 0 0 4px rg
 .badge.green { background: #e6eddf; color: var(--green); }
 .badge.gold { background: #fff0c7; color: #6b4a13; }
 .summary { padding: 0 18px 14px 60px; color: var(--muted); line-height: 1.5; }
+.beerStyle { margin: 0 18px 12px 60px; padding: 11px 13px; background: rgba(75, 47, 28, 0.07); border: 1px solid rgba(75, 47, 28, 0.12); border-radius: 14px; color: var(--brown); line-height: 1.45; }
+.beerStyle strong { color: var(--brown2); }
 .address { margin: 0 18px 14px 60px; padding: 11px 13px; background: rgba(216, 152, 53, 0.12); border: 1px solid rgba(216, 152, 53, 0.18); border-radius: 14px; font-weight: 800; }
 .details { border-top: 1px solid rgba(75, 47, 28, 0.1); padding: 14px 18px 18px 60px; display: none; }
 .card.open .details { display: block; }
@@ -76,4 +78,4 @@ input:focus, select:focus { border-color: var(--amber); box-shadow: 0 0 0 4px rg
 .empty { grid-column: 1 / -1; text-align: center; padding: 60px 20px; border-radius: var(--radius); background: rgba(255, 250, 240, 0.8); color: var(--muted); }
 footer { width: min(1180px, calc(100% - 28px)); margin: 0 auto 36px; color: var(--muted); text-align: center; font-size: 0.92rem; }
 @media (max-width: 920px) { .controls { grid-template-columns: repeat(2, 1fr); } .field, .danger { grid-column: span 2; } .breweries { grid-template-columns: 1fr; } }
-@media (max-width: 540px) { main { width: min(100% - 18px, 1180px); } .controls { grid-template-columns: 1fr 1fr; padding: 12px; } .summary, .address, .details, .cardActions { margin-left: 0; padding-left: 18px; } .address { margin-right: 18px; } .cardTop { align-items: flex-start; } .check { width: 32px; height: 32px; } .titleRow { display: block; } .score { display: inline-flex; margin-top: 8px; } }
+@media (max-width: 540px) { main { width: min(100% - 18px, 1180px); } .controls { grid-template-columns: 1fr 1fr; padding: 12px; } .summary, .address, .beerStyle, .details, .cardActions { margin-left: 0; padding-left: 18px; } .address, .beerStyle { margin-right: 18px; } .cardTop { align-items: flex-start; } .check { width: 32px; height: 32px; } .titleRow { display: block; } .score { display: inline-flex; margin-top: 8px; } }
