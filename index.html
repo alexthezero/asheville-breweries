@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asheville Brewery Checklist</title>
+  <meta name="description" content="A ranked Asheville breweries checklist web app with addresses, details, map links, and local saved progress." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="heroInner">
+      <p class="eyebrow">Asheville, North Carolina</p>
+      <h1>Brewery Checklist</h1>
+      <p class="heroText">
+        Popular Asheville breweries ranked highest to lowest by a static starter score. Check off each stop, read details, and keep progress saved on this device.
+      </p>
+
+      <div class="heroActions">
+        <a class="btn light" href="#breweries">View breweries</a>
+        <button class="btn ghost" id="copyCheckedBtn" type="button">Copy checked list</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="controls" aria-label="Brewery checklist controls">
+      <div class="stat">
+        <strong id="completedCount">0</strong>
+        <span>visited</span>
+      </div>
+
+      <div class="stat">
+        <strong id="totalCount">0</strong>
+        <span>breweries</span>
+      </div>
+
+      <label class="field">
+        <span>Search</span>
+        <input id="searchInput" type="search" placeholder="Search Burial, lagers, South Slope..." autocomplete="off" />
+      </label>
+
+      <label class="field">
+        <span>Area / Category</span>
+        <select id="categoryFilter">
+          <option value="all">All categories</option>
+        </select>
+      </label>
+
+      <button class="btn danger" id="resetBtn" type="button">Reset checks</button>
+    </section>
+
+    <section class="notice">
+      <strong>Note:</strong> The ranking uses a static starter score, not live Google/Yelp data. Ratings, hours, menus, and addresses can change — use the official links before visiting.
+    </section>
+
+    <section id="breweries" class="breweries" aria-live="polite"></section>
+  </main>
+
+  <footer>
+    <p>Checklist progress saves locally in your browser using localStorage. No login, database, or server required.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
