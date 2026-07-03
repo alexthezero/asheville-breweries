@@ -16,6 +16,20 @@ const breweries = [
   {id:"new-origin",rank:15,rating:8.4,name:"New Origin Brewing Company",category:"New School / Trendy Styles",address:"131 Thompson St, Asheville, NC 28803",area:"Biltmore Village area",website:"https://neworiginbrewing.com/",specialty:"Hazy IPAs, smoothie sours, adjunct stouts, and modern taproom trend styles",summary:"Smaller trend-forward brewery known for hazy IPAs, smoothie sours, adjunct stouts, and newer-school beer styles.",details:"A good pick if you want something less obvious than the big-name stops. New Origin leans into modern beer trends and is easy to add near Biltmore Village.",bestFor:"Hazy IPAs, smoothie sours, modern styles",tip:"Good add-on near Biltmore Village, Hillman, or French Broad."}
 ];
 
+const filterOptions = [
+  { value: "all", label: "All styles / vibes" },
+  { value: "ipa", label: "IPAs / Hazy IPAs" },
+  { value: "lager", label: "Lagers" },
+  { value: "sour", label: "Sours / Funky Beer" },
+  { value: "stout", label: "Stouts / Dark Beer" },
+  { value: "farmhouse", label: "Farmhouse / Belgian" },
+  { value: "classic", label: "Classic Ales / Pub Beer" },
+  { value: "food", label: "Food-Friendly" },
+  { value: "outdoor", label: "Outdoor / Large Campus" },
+  { value: "south-slope", label: "South Slope Crawl" },
+  { value: "west-asheville", label: "West Asheville Route" }
+];
+
 const STORAGE_KEY = "ashevilleBreweryChecklist.v1";
 const state = { completed: loadCompleted(), search: "", category: "all" };
 
@@ -35,17 +49,37 @@ function saveCompleted() { localStorage.setItem(STORAGE_KEY, JSON.stringify(stat
 function escapeHtml(value) {
   return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 }
+function getFilterTags(brewery) {
+  const text = [brewery.name, brewery.category, brewery.area, brewery.specialty, brewery.summary, brewery.details, brewery.bestFor, brewery.tip].join(" ").toLowerCase();
+  const tags = [];
+
+  if (text.includes("ipa") || text.includes("hazy") || text.includes("pale") || text.includes("hop")) tags.push("ipa");
+  if (text.includes("lager") || text.includes("kölsch") || text.includes("crisp")) tags.push("lager");
+  if (text.includes("sour") || text.includes("funk") || text.includes("wild") || text.includes("mixed-culture") || text.includes("fruited")) tags.push("sour");
+  if (text.includes("stout") || text.includes("porter") || text.includes("dark")) tags.push("stout");
+  if (text.includes("farmhouse") || text.includes("belgian") || text.includes("saison") || text.includes("rustic")) tags.push("farmhouse");
+  if (text.includes("classic") || text.includes("pub") || text.includes("brewpub") || text.includes("easy-drinking") || text.includes("approachable") || text.includes("english")) tags.push("classic");
+  if (text.includes("food") || text.includes("pizza") || text.includes("lunch") || text.includes("meal") || text.includes("brewpub")) tags.push("food");
+  if (text.includes("outdoor") || text.includes("campus") || text.includes("river") || text.includes("meadow") || text.includes("groups")) tags.push("outdoor");
+  if (brewery.area.toLowerCase().includes("south slope")) tags.push("south-slope");
+  if (brewery.area.toLowerCase().includes("west asheville")) tags.push("west-asheville");
+
+  return [...new Set(tags)];
+}
 function buildCategoryOptions() {
-  [...new Set(breweries.map(b => b.category))].sort().forEach(category => {
+  categoryFilter.innerHTML = "";
+  filterOptions.forEach(optionData => {
     const option = document.createElement("option");
-    option.value = category;
-    option.textContent = category;
+    option.value = optionData.value;
+    option.textContent = optionData.label;
     categoryFilter.appendChild(option);
   });
 }
 function matchesFilters(brewery) {
   const text = [brewery.name, brewery.category, brewery.address, brewery.area, brewery.specialty, brewery.summary, brewery.details, brewery.bestFor, brewery.tip].join(" ").toLowerCase();
-  return text.includes(state.search.trim().toLowerCase()) && (state.category === "all" || brewery.category === state.category);
+  const searchMatch = text.includes(state.search.trim().toLowerCase());
+  const filterMatch = state.category === "all" || getFilterTags(brewery).includes(state.category);
+  return searchMatch && filterMatch;
 }
 function mapUrl(query) { return `https://maps.apple.com/?q=${encodeURIComponent(query)}`; }
 function badge(text, className = "") { return `<span class="badge ${className}">${escapeHtml(text)}</span>`; }
@@ -55,7 +89,7 @@ function render() {
   completedCountEl.textContent = breweries.filter(b => state.completed[b.id]).length;
   totalCountEl.textContent = breweries.length;
   if (!filtered.length) {
-    breweriesEl.innerHTML = `<div class="empty"><h2>No breweries found</h2><p>Try a different search or category.</p></div>`;
+    breweriesEl.innerHTML = `<div class="empty"><h2>No breweries found</h2><p>Try a different search or beer style / vibe filter.</p></div>`;
     return;
   }
   breweriesEl.innerHTML = filtered.map(b => {
