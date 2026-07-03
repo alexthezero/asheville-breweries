@@ -52,7 +52,6 @@ function escapeHtml(value) {
 function getFilterTags(brewery) {
   const text = [brewery.name, brewery.category, brewery.area, brewery.specialty, brewery.summary, brewery.details, brewery.bestFor, brewery.tip].join(" ").toLowerCase();
   const tags = [];
-
   if (text.includes("ipa") || text.includes("hazy") || text.includes("pale") || text.includes("hop")) tags.push("ipa");
   if (text.includes("lager") || text.includes("kölsch") || text.includes("crisp")) tags.push("lager");
   if (text.includes("sour") || text.includes("funk") || text.includes("wild") || text.includes("mixed-culture") || text.includes("fruited")) tags.push("sour");
@@ -63,7 +62,6 @@ function getFilterTags(brewery) {
   if (text.includes("outdoor") || text.includes("campus") || text.includes("river") || text.includes("meadow") || text.includes("groups")) tags.push("outdoor");
   if (brewery.area.toLowerCase().includes("south slope")) tags.push("south-slope");
   if (brewery.area.toLowerCase().includes("west asheville")) tags.push("west-asheville");
-
   return [...new Set(tags)];
 }
 function buildCategoryOptions() {
@@ -88,16 +86,17 @@ function render() {
   const filtered = sorted.filter(matchesFilters);
   completedCountEl.textContent = breweries.filter(b => state.completed[b.id]).length;
   totalCountEl.textContent = breweries.length;
+
   if (!filtered.length) {
     breweriesEl.innerHTML = `<div class="empty"><h2>No breweries found</h2><p>Try a different search or beer style / vibe filter.</p></div>`;
     return;
   }
+
   breweriesEl.innerHTML = filtered.map(b => {
     const checked = Boolean(state.completed[b.id]);
     return `
       <article class="card ${checked ? "done" : ""}" data-id="${escapeHtml(b.id)}">
         <div class="cardTop">
-          <input class="check" type="checkbox" aria-label="Mark ${escapeHtml(b.name)} as visited" ${checked ? "checked" : ""} />
           <div>
             <div class="titleRow">
               <div><h2>${escapeHtml(b.name)}</h2><div class="rank">#${b.rank} ranked starter score</div></div>
@@ -117,25 +116,29 @@ function render() {
           <div class="detailLine"><strong>Ranking note</strong>Static starter ranking. Update scores in app.js any time you want to reflect new review data.</div>
         </div>
         <div class="cardActions">
+          <button class="visitButton ${checked ? "visited" : ""}" type="button">${checked ? "Visited ✓" : "I visited"}</button>
           <button class="toggleDetails" type="button">Details</button>
           <a class="linkBtn" href="${mapUrl(b.name + " " + b.address)}" target="_blank" rel="noopener">Apple Maps</a>
           <a class="linkBtn" href="${escapeHtml(b.website)}" target="_blank" rel="noopener">Website</a>
         </div>
       </article>`;
   }).join("");
+
   bindCardEvents();
 }
 function bindCardEvents() {
   document.querySelectorAll(".card").forEach(card => {
     const id = card.dataset.id;
-    const checkbox = card.querySelector(".check");
+    const visitButton = card.querySelector(".visitButton");
     const detailButton = card.querySelector(".toggleDetails");
-    checkbox.addEventListener("change", () => {
-      if (checkbox.checked) state.completed[id] = true;
-      else delete state.completed[id];
+
+    visitButton.addEventListener("click", () => {
+      if (state.completed[id]) delete state.completed[id];
+      else state.completed[id] = true;
       saveCompleted();
       render();
     });
+
     detailButton.addEventListener("click", () => {
       card.classList.toggle("open");
       detailButton.textContent = card.classList.contains("open") ? "Hide details" : "Details";
@@ -143,17 +146,17 @@ function bindCardEvents() {
   });
 }
 function resetChecks() {
-  if (!window.confirm("Reset all checked breweries on this device?")) return;
+  if (!window.confirm("Reset all visited breweries on this device?")) return;
   state.completed = {};
   saveCompleted();
   render();
 }
 async function copyCheckedList() {
   const checked = breweries.filter(b => state.completed[b.id]).sort((a, b) => a.rank - b.rank);
-  if (!checked.length) { alert("Nothing is checked yet."); return; }
+  if (!checked.length) { alert("Nothing is marked visited yet."); return; }
   const text = checked.map(b => `${b.rank}. ${b.name} — ${b.address} — Best style: ${b.specialty}`).join("\n");
-  try { await navigator.clipboard.writeText(text); alert("Checked brewery list copied."); }
-  catch (error) { prompt("Copy your checked brewery list:", text); }
+  try { await navigator.clipboard.writeText(text); alert("Visited brewery list copied."); }
+  catch (error) { prompt("Copy your visited brewery list:", text); }
 }
 searchInput.addEventListener("input", e => { state.search = e.target.value; render(); });
 categoryFilter.addEventListener("change", e => { state.category = e.target.value; render(); });
