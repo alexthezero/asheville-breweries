@@ -47,7 +47,7 @@ function matchesFilters(brewery) {
   const text = [brewery.name, brewery.category, brewery.address, brewery.area, brewery.specialty, brewery.summary, brewery.details, brewery.bestFor, brewery.tip].join(" ").toLowerCase();
   return text.includes(state.search.trim().toLowerCase()) && (state.category === "all" || brewery.category === state.category);
 }
-function mapUrl(query) { return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`; }
+function mapUrl(query) { return `https://maps.apple.com/?q=${encodeURIComponent(query)}`; }
 function badge(text, className = "") { return `<span class="badge ${className}">${escapeHtml(text)}</span>`; }
 function render() {
   const sorted = [...breweries].sort((a, b) => b.rating - a.rating);
@@ -84,7 +84,7 @@ function render() {
         </div>
         <div class="cardActions">
           <button class="toggleDetails" type="button">Details</button>
-          <a class="linkBtn" href="${mapUrl(b.name + " " + b.address)}" target="_blank" rel="noopener">Map</a>
+          <a class="linkBtn" href="${mapUrl(b.name + " " + b.address)}" target="_blank" rel="noopener">Apple Maps</a>
           <a class="linkBtn" href="${escapeHtml(b.website)}" target="_blank" rel="noopener">Website</a>
         </div>
       </article>`;
