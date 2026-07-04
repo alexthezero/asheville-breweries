@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Asheville Brewery Checklist</title>
-  <meta name="description" content="A ranked Asheville and Sylva breweries checklist web app with addresses, details, map links, and local saved progress." />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="logo.css" />
-  <link rel="stylesheet" href="visited.css" />
-  <link rel="stylesheet" href="city-switch.css" />
+  <title>Western NC Brewery Checklist</title>
+  <meta name="description" content="A ranked Asheville, Sylva, and Highlands-area breweries checklist web app with addresses, details, map links, and local saved progress." />
+  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="logo.css?v=3" />
+  <link rel="stylesheet" href="visited.css?v=3" />
+  <link rel="stylesheet" href="city-switch.css?v=3" />
 </head>
 <body>
   <header class="hero">
@@ -16,7 +16,7 @@
       <p class="eyebrow">Western North Carolina</p>
       <h1>Brewery Checklist</h1>
       <p class="heroText">
-        Popular Asheville and Sylva breweries ranked highest to lowest by a static starter score. Check off each stop, read details, and keep progress saved on this device.
+        Popular Asheville, Sylva, and Highlands-area breweries ranked highest to lowest by a static starter score. Check off each stop, read details, and keep progress saved on this device.
       </p>
 
       <div class="heroActions">
@@ -27,6 +27,18 @@
   </header>
 
   <main>
+    <section class="citySwitch" id="citySwitch" aria-label="Choose brewery city">
+      <div class="citySwitchText">
+        <strong>Choose brewery city</strong>
+        <span>Switch between Asheville, Sylva, and Highlands-area brewery lists.</span>
+      </div>
+      <div class="cityButtons" role="group" aria-label="Choose brewery city">
+        <button class="cityButton" type="button" data-city="asheville">Asheville</button>
+        <button class="cityButton" type="button" data-city="sylva">Sylva</button>
+        <button class="cityButton" type="button" data-city="highlands">Highlands</button>
+      </div>
+    </section>
+
     <section class="controls" aria-label="Brewery checklist controls">
       <div class="stat">
         <strong id="completedCount">0</strong>
@@ -64,8 +76,8 @@
     <p>Checklist progress saves locally in your browser using localStorage. No login, database, or server required.</p>
   </footer>
 
-  <script src="app.js"></script>
-  <script src="logos.js"></script>
-  <script src="city-switch.js"></script>
+  <script src="app.js?v=3"></script>
+  <script src="logos.js?v=3"></script>
+  <script src="city-switch.js?v=3"></script>
 </body>
 </html>
