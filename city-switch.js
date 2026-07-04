@@ -24,21 +24,25 @@ try{
 
 state.city=localStorage.getItem(CITY_STORAGE_KEY)||'asheville';
 
-const citySwitch=document.createElement('section');
-citySwitch.className='citySwitch';
-citySwitch.innerHTML=`
-  <div class="citySwitchText">
-    <strong>Choose brewery city</strong>
-    <span>Switch between Asheville, Sylva, and Highlands-area brewery lists.</span>
-  </div>
-  <div class="cityButtons" role="group" aria-label="Choose brewery city">
-    <button class="cityButton" type="button" data-city="asheville">Asheville</button>
-    <button class="cityButton" type="button" data-city="sylva">Sylva</button>
-    <button class="cityButton" type="button" data-city="highlands">Highlands</button>
-  </div>`;
-const main=document.querySelector('main');
-const controls=document.querySelector('.controls');
-if(main&&controls) main.insertBefore(citySwitch,controls);
+let citySwitch=document.getElementById('citySwitch');
+if(!citySwitch){
+  citySwitch=document.createElement('section');
+  citySwitch.className='citySwitch';
+  citySwitch.id='citySwitch';
+  citySwitch.innerHTML=`
+    <div class="citySwitchText">
+      <strong>Choose brewery city</strong>
+      <span>Switch between Asheville, Sylva, and Highlands-area brewery lists.</span>
+    </div>
+    <div class="cityButtons" role="group" aria-label="Choose brewery city">
+      <button class="cityButton" type="button" data-city="asheville">Asheville</button>
+      <button class="cityButton" type="button" data-city="sylva">Sylva</button>
+      <button class="cityButton" type="button" data-city="highlands">Highlands</button>
+    </div>`;
+  const main=document.querySelector('main');
+  const controls=document.querySelector('.controls');
+  if(main&&controls) main.insertBefore(citySwitch,controls);
+}
 
 const baseMatchesFilters=matchesFilters;
 matchesFilters=function(brewery){
