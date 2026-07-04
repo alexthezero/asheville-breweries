@@ -56,7 +56,7 @@ function fallbackDrinkMenu(card){
 }
 
 function menuGroup(title,items){
-  return `<div class="drinkMenuGroup"><strong>${title}</strong><ul>${items.map(item=>`<li><span class="drinkName">${escapeHtml(item)}</span><span class="drinkProfile">${escapeHtml(getFlavorProfile(item))}</span></li>`).join('')}</ul></div>`;
+  return `<div class="drinkMenuGroup"><strong>${title}</strong><ul>${items.map(item=>`<li><span class="drinkName">${escapeHtml(item)}</span><p class="drinkProfile"><strong>Flavor profile:</strong> ${escapeHtml(getFlavorProfile(item))}</p></li>`).join('')}</ul></div>`;
 }
 
 function renderDrinkMenu(card){
@@ -67,27 +67,38 @@ function renderDrinkMenu(card){
 
 function addDrinkMenuButtons(){
   document.querySelectorAll('#breweries .card').forEach(card=>{
-    if(!card.querySelector('.drinkMenuPanel')){
-      const actions=card.querySelector('.cardActions');
-      const details=card.querySelector('.details');
-      if(actions){
-        const button=document.createElement('button');
-        button.className='toggleDetails drinkMenuButton';
-        button.type='button';
-        button.textContent='Drink Menu';
-        button.addEventListener('click',()=>{
-          card.classList.toggle('menuOpen');
-          button.classList.toggle('active',card.classList.contains('menuOpen'));
-          button.textContent=card.classList.contains('menuOpen')?'Hide Menu':'Drink Menu';
-        });
-        actions.insertBefore(button,actions.firstChild);
-      }
-      if(details){details.insertAdjacentHTML('afterend',renderDrinkMenu(card));}
+    const actions=card.querySelector('.cardActions');
+    const details=card.querySelector('.details');
+    let panel=card.querySelector('.drinkMenuPanel');
+    const needsFlavorUpgrade=panel&&!panel.querySelector('.drinkProfile');
+
+    if(panel&&needsFlavorUpgrade){
+      panel.remove();
+      panel=null;
+    }
+
+    if(actions&&!actions.querySelector('.drinkMenuButton')){
+      const button=document.createElement('button');
+      button.className='toggleDetails drinkMenuButton';
+      button.type='button';
+      button.textContent=card.classList.contains('menuOpen')?'Hide Menu':'Drink Menu';
+      button.addEventListener('click',()=>{
+        card.classList.toggle('menuOpen');
+        button.classList.toggle('active',card.classList.contains('menuOpen'));
+        button.textContent=card.classList.contains('menuOpen')?'Hide Menu':'Drink Menu';
+      });
+      actions.insertBefore(button,actions.firstChild);
+    }
+
+    if(!panel&&details){
+      details.insertAdjacentHTML('afterend',renderDrinkMenu(card));
     }
   });
 }
 
 addDrinkMenuButtons();
+setTimeout(addDrinkMenuButtons,250);
+setTimeout(addDrinkMenuButtons,1000);
 const drinkMenuList=document.getElementById('breweries');
 if(drinkMenuList){
   const observer=new MutationObserver(()=>window.requestAnimationFrame(addDrinkMenuButtons));
